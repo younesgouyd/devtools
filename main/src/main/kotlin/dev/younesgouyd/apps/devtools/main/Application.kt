@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import dev.younesgouyd.apps.devtools.main.conversion.Conversion
 
 object Application {
     fun start() {
@@ -28,10 +29,10 @@ object Application {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(horizontal = 300.dp),
+                                    .padding(20.dp),
                                 contentAlignment = Alignment.Center
                             ) {
-                                HexToAscii()
+                                Conversion()
                             }
                         }
                     }

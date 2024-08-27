@@ -10,7 +10,13 @@ kotlin {
     jvmToolchain(libs.versions.java.get().toInt())
 }
 
+tasks.test {
+    useJUnitPlatform()
+}
+
 dependencies {
+    testImplementation(kotlin("test"))
+
     implementation(libs.coroutines.core)
 
     implementation(compose.desktop.currentOs) {
