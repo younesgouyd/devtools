@@ -1,5 +1,6 @@
 package dev.younesgouyd.apps.devtools.main.conversion
 
+import dev.younesgouyd.apps.devtools.main.ui.convert.Converter
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

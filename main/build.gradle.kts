@@ -3,7 +3,9 @@ version = "0.1.0"
 
 plugins {
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.compose)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.compose.jetbrains)
+    alias(libs.plugins.serialization)
 }
 
 kotlin {
@@ -24,4 +26,6 @@ dependencies {
     }
     implementation(compose.material3)
     implementation(compose.materialIconsExtended)
+    implementation(libs.serialization)
+    implementation(libs.jdom)
 }

@@ -1,16 +1,14 @@
-package dev.younesgouyd.apps.devtools.main.conversion
+package dev.younesgouyd.apps.devtools.main.ui.convert
 
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowRightAlt
-import androidx.compose.material3.*
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import java.nio.charset.Charset
 
@@ -19,9 +17,7 @@ private enum class DataType {
 }
 
 @Composable
-fun Conversion(
-    modifier: Modifier = Modifier
-) {
+fun Convert() {
     val dataTypeOptions: List<Option<DataType>> = remember { DataType.entries.map { Option(it.name, it) } }
     val charsetOptions: List<Option<Charset>> = remember {
         listOf(
@@ -127,8 +123,9 @@ fun Conversion(
     }
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
+            .padding(horizontal = 12.dp)
             .scrollable(
                 state = rememberScrollState(),
                 orientation = Orientation.Vertical
@@ -136,12 +133,6 @@ fun Conversion(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Data Conversion",
-            style = MaterialTheme.typography.headlineMedium,
-            textAlign = TextAlign.Center
-        )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
@@ -153,10 +144,6 @@ fun Conversion(
                 options = dataTypeOptions,
                 selectedOption = selectedType1Option,
                 onValueChange = { type1 = it; },
-            )
-            IconButton(
-                onClick = ::convert,
-                content = { Icon(Icons.AutoMirrored.Default.ArrowRightAlt, null) }
             )
             DropdownMenu<DataType>(
                 modifier = Modifier.weight(.1f),

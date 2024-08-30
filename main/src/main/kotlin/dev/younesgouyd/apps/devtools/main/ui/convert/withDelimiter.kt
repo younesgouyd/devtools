@@ -1,4 +1,4 @@
-package dev.younesgouyd.apps.devtools.main.conversion
+package dev.younesgouyd.apps.devtools.main.ui.convert
 
 fun String.withDelimiter(partLength: Int, oldDelimiter: String, newDelimiter: String): String {
     val result = StringBuilder()

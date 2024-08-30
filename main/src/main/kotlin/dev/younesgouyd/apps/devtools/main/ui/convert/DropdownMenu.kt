@@ -1,4 +1,4 @@
-package dev.younesgouyd.apps.devtools.main.conversion
+package dev.younesgouyd.apps.devtools.main.ui.convert
 
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerIcon
+import androidx.compose.ui.input.pointer.pointerHoverIcon
 
 data class Option<Value>(
     val label: String,
@@ -35,7 +37,8 @@ fun <Value> DropdownMenu(
                 // The `menuAnchor` modifier must be passed to the text field to handle
                 // expanding/collapsing the menu on click. A read-only text field has
                 // the anchor type `PrimaryNotEditable`.
-                .menuAnchor(),
+                .menuAnchor()
+                .pointerHoverIcon(icon = PointerIcon.Default, overrideDescendants = true),
             value = selectedOption?.label ?: "",
             onValueChange = {},
             readOnly = true,

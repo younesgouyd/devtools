@@ -1,7 +1,7 @@
-package dev.younesgouyd.apps.devtools.main.conversion
+package dev.younesgouyd.apps.devtools.main.ui.convert
 
-import dev.younesgouyd.apps.devtools.main.conversion.Converter.Util.binaryStringToByteArray
-import dev.younesgouyd.apps.devtools.main.conversion.Converter.Util.toBinaryString
+import dev.younesgouyd.apps.devtools.main.ui.convert.Converter.Util.binaryStringToByteArray
+import dev.younesgouyd.apps.devtools.main.ui.convert.Converter.Util.toBinaryString
 import java.nio.charset.Charset
 
 object Converter {
@@ -96,7 +96,7 @@ object Converter {
             BinaryNumberFormat.Byte -> decimal.toByte().toUByte().toString(2).padStart(8, '0')
             BinaryNumberFormat.UByte -> decimal.toUByte().toString(2).padStart(8, '0')
             BinaryNumberFormat.Short -> decimal.toShort().toUShort().toString(2).padStart(16, '0')
-            BinaryNumberFormat.UShort-> decimal.toUShort().toString(2).padStart(16, '0')
+            BinaryNumberFormat.UShort -> decimal.toUShort().toString(2).padStart(16, '0')
             BinaryNumberFormat.Int32 -> decimal.toInt().toUInt().toString(2).padStart(32, '0')
             BinaryNumberFormat.UInt32 -> decimal.toUInt().toString(2).padStart(32, '0')
             BinaryNumberFormat.Int64 -> decimal.toLong().toULong().toString(2).padStart(64, '0')
