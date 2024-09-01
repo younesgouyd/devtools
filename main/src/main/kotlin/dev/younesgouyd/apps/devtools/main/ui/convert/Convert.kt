@@ -4,17 +4,14 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowRightAlt
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import java.nio.charset.Charset
-
-private enum class DataType {
-    Binary, Decimal, Hexadecimal, Text
-}
 
 @Composable
 fun Convert() {
@@ -53,6 +50,42 @@ fun Convert() {
             Option("False", false)
         )
     }
+    val unicodeControlsPictures = remember {
+        mapOf(
+            '\u0000' to '␀',
+            '\u0001' to '␁',
+            '\u0002' to '␂',
+            '\u0003' to '␃',
+            '\u0004' to '␄',
+            '\u0005' to '␅',
+            '\u0006' to '␆',
+            '\u0007' to '␇',
+            '\u0008' to '␈',
+            '\u0009' to '␉',
+            '\u0010' to '␊',
+            '\u0011' to '␋',
+            '\u0012' to '␌',
+            '\u0013' to '␍',
+            '\u0014' to '␎',
+            '\u0015' to '␏',
+            '\u0016' to '␐',
+            '\u0017' to '␑',
+            '\u0018' to '␒',
+            '\u0019' to '␓',
+            '\u0020' to '␔',
+            '\u0021' to '␕',
+            '\u0022' to '␖',
+            '\u0023' to '␗',
+            '\u0024' to '␘',
+            '\u0025' to '␙',
+            '\u0026' to '␚',
+            '\u0027' to '␚',
+            '\u0028' to '␜',
+            '\u0029' to '␝',
+            '\u0030' to '␞',
+            '\u0031' to '␟',
+        )
+    }
 
     var type1 by remember { mutableStateOf(DataType.Text) }
     var type2 by remember { mutableStateOf(DataType.Binary) }
@@ -65,6 +98,7 @@ fun Convert() {
     var binaryNumberFormat1 by remember { mutableStateOf(Converter.BinaryNumberFormat.Int32) }
     var binaryNumberFormat2 by remember { mutableStateOf(Converter.BinaryNumberFormat.Int32) }
     var toUppercase2 by remember { mutableStateOf(true) }
+    var convertToControlPictures by remember { mutableStateOf(true) }
     var error1 by remember { mutableStateOf(false) }
     var errorMessage1 by remember { mutableStateOf("") }
 
@@ -84,6 +118,12 @@ fun Convert() {
     val selectedBinaryNumberFormatOption2 = remember(binaryNumberFormat2) { Option(binaryNumberFormat2.name, binaryNumberFormat2) }
     val selectedToUppercase2Option = remember(toUppercase2) { Option(toUppercase2.toString(), toUppercase2) }
 
+    fun String.convertControlCharactersToControlPictures(): String {
+        return this.map {
+            unicodeControlsPictures[it] ?: it
+        }.joinToString("")
+    }
+
     fun convert() {
         error1 = false
         errorMessage1 = ""
@@ -94,7 +134,10 @@ fun Convert() {
                     DataType.Binary -> Converter.binaryToBinary(binary = val1, inputDelimiter = delimiter1, outputDelimiter = delimiter2)
                     DataType.Decimal -> Converter.binaryToDecimal(binary = val1, binaryNumberFormat = binaryNumberFormat1, inputDelimiter = delimiter1)
                     DataType.Hexadecimal -> Converter.binaryToHex(binary = val1, inputDelimiter = delimiter1, outputDelimiter = delimiter2, toUppercase = toUppercase2)
-                    DataType.Text -> Converter.binaryToText(binary = val1, inputDelimiter = delimiter1, charset = charset1)
+                    DataType.Text -> Converter.binaryToText(binary = val1, inputDelimiter = delimiter1, charset = charset1).let {
+                        if (convertToControlPictures) it.convertControlCharactersToControlPictures()
+                        else it
+                    }
                 }
                 DataType.Decimal -> when (type2) {
                     DataType.Binary -> Converter.decimalToBinary(decimal = val1, binaryNumberFormat = binaryNumberFormat2, outputDelimiter = delimiter2)
@@ -106,7 +149,10 @@ fun Convert() {
                     DataType.Binary -> Converter.hexToBinary(hex = val1, inputDelimiter = delimiter1, outputDelimiter = delimiter2)
                     DataType.Decimal -> Converter.hexToDecimal(hex = val1, binaryNumberFormat = binaryNumberFormat1, inputDelimiter = delimiter1)
                     DataType.Hexadecimal -> Converter.hexToHex(hex = val1, inputDelimiter = delimiter1, outputDelimiter = delimiter2, toUppercase = toUppercase2)
-                    DataType.Text -> Converter.hexToText(hex = val1, charset = charset1, inputDelimiter = delimiter1)
+                    DataType.Text -> Converter.hexToText(hex = val1, charset = charset1, inputDelimiter = delimiter1).let {
+                        if (convertToControlPictures) it.convertControlCharactersToControlPictures()
+                        else it
+                    }
                 }
                 DataType.Text -> when (type2) {
                     DataType.Binary -> Converter.textToBinary(text = val1, charset = charset2, outputDelimiter = delimiter2)
@@ -144,6 +190,10 @@ fun Convert() {
                 options = dataTypeOptions,
                 selectedOption = selectedType1Option,
                 onValueChange = { type1 = it; },
+            )
+            IconButton(
+                onClick = ::convert,
+                content = { Icon(Icons.AutoMirrored.Default.ArrowRightAlt, null) }
             )
             DropdownMenu<DataType>(
                 modifier = Modifier.weight(.1f),
@@ -225,6 +275,21 @@ fun Convert() {
                         onValueChange = { toUppercase2 = it; convert() },
                     )
                 }
+                if ((type1 == DataType.Binary || type1 == DataType.Hexadecimal) && type2 == DataType.Text) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = convertToControlPictures,
+                            onCheckedChange = { convertToControlPictures = !convertToControlPictures; convert() }
+                        )
+                        Text(
+                            text = "Control Characters To Control Pictures",
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                }
             }
         }
         Row(
@@ -253,4 +318,8 @@ fun Convert() {
             )
         }
     }
+}
+
+private enum class DataType {
+    Binary, Decimal, Hexadecimal, Text
 }
