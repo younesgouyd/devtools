@@ -37,11 +37,9 @@ fun Format() {
                 }
                 FileFormats.Xml -> {
                     val saxBuilder = SAXBuilder()
-                    val document: Document = saxBuilder.build(StringReader(value))
-
+                    val document: Document = saxBuilder.build(StringReader("<root>$value</root>"))
                     val xmlOutputter = XMLOutputter()
-                    xmlOutputter.format = Format.getPrettyFormat()
-
+                    xmlOutputter.format = Format.getPrettyFormat().setOmitDeclaration(true)
                     xmlOutputter.outputString(document)
                 }
             }
